@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manipulación del DOM con JavaScript - Versión Vistosa</title>
+    <style>
+        /* Estilos generales del cuerpo */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #fdfbfb, #ebedee); /* Fondo degradado inicial */
+            text-align: center;
+            padding: 20px;
+            transition: background 0.5s; /* Transición suave al cambiar el fondo */
+        }
+
+        /* Estilos del título */
+        h1 {
+            color: #3498db;
+            transition: color 0.3s, transform 0.3s; /* Transición de color y tamaño */
+            cursor: pointer; /* Cambia el cursor al pasar sobre el título */
+        }
+
+        /* Clase para animación del título */
+        h1.animado {
+            transform: scale(1.2); /* Aumenta el tamaño */
+            color: #e74c3c; /* Cambia el color */
+        }
+
+        /* Estilos de los párrafos */
+        .parrafo {
+            font-size: 18px;
+            margin: 10px 0;
+            transition: color 0.3s; /* Cambio de color suave */
+        }
+
+        /* Estilos de la lista */
+        ul {
+            list-style-type: square;
+            padding: 0;
+        }
+
+        li {
+            padding: 5px;
+            transition: background 0.3s, transform 0.3s; /* Animación de fondo y posición al pasar mouse */
+        }
+
+        li:hover {
+            background-color: #f1c40f; /* Cambia el fondo al pasar el mouse */
+            transform: translateX(5px); /* Mueve el elemento ligeramente */
+        }
+
+        /* Estilos de botones */
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s; /* Animación al pasar mouse */
+        }
+
+        button:hover {
+            transform: scale(1.1); /* Agranda el botón */
+            background-color: #2ecc71; /* Cambia color */
+            color: white; /* Cambia texto */
+        }
+
+        /* Estilo del input */
+        #nuevoItem {
+            padding: 8px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Título principal -->
+    <h1 id="titulo">Manipulación del DOM Vistosa</h1>
+
+    <!-- Párrafos -->
+    <p class="parrafo">¡Bienvenido! Aprende a manipular elementos del DOM con estilo.</p>
+    <p class="parrafo">Este proyecto incluye cambios de texto, estilos, eventos y animaciones.</p>
+
+    <!-- Lista de elementos -->
+    <ul id="lista">
+        <li>Elemento 1</li>
+        <li>Elemento 2</li>
+        <li>Elemento 3</li>
+    </ul>
+
+    <!-- Input y botones -->
+    <input type="text" id="nuevoItem" placeholder="Escribe un nuevo ítem">
+    <br>
+    <button id="btnAgregar">Agregar ítem</button>
+    <button id="btnEliminar">Eliminar último ítem</button>
+    <button id="btnCambiar">Cambiar Estilo Título</button>
+    <button id="btnColores">Cambiar Fondo Aleatorio</button>
+
+    <script>
+        // -------------------------
+        // SELECCIÓN DE ELEMENTOS
+        // -------------------------
+        const titulo = document.getElementById('titulo'); // Título principal
+        const parrafos = document.getElementsByClassName('parrafo'); // Todos los párrafos
+        const lista = document.getElementById('lista'); // Lista de elementos
+        const inputItem = document.getElementById('nuevoItem'); // Input para agregar ítem
+        const btnAgregar = document.getElementById('btnAgregar'); // Botón agregar
+        const btnEliminar = document.getElementById('btnEliminar'); // Botón eliminar
+        const btnCambiar = document.getElementById('btnCambiar'); // Botón cambiar estilo
+        const btnColores = document.getElementById('btnColores'); // Botón cambiar fondo
+
+        // -------------------------
+        // FUNCIONES
+        // -------------------------
+
+        // Función para cambiar el texto y estilo del título y párrafos
+        function cambiarTitulo() {
+            titulo.innerText = "¡Título Modificado!"; // Cambia el texto del título
+            titulo.classList.toggle('animado'); // Alterna clase animada (escala y color)
+            
+            // Cambia color de cada párrafo a un color aleatorio y pone negrita
+            for (let p of parrafos) {
+                p.style.color = `rgb(${randomColor()}, ${randomColor()}, ${randomColor()})`;
+                p.style.fontWeight = 'bold';
+            }
+        }
+
+        // Función que genera un número aleatorio entre 0 y 255
+        function randomColor() {
+            return Math.floor(Math.random() * 256);
+        }
+
+        // Función para cambiar el fondo de la página a un degradado aleatorio
+        function cambiarFondo() {
+            document.body.style.background = `linear-gradient(120deg, 
+                rgb(${randomColor()},${randomColor()},${randomColor()}), 
+                rgb(${randomColor()},${randomColor()},${randomColor()}))`;
+        }
+
+        // Función para agregar un nuevo ítem a la lista
+        function agregarItem() {
+            if(inputItem.value.trim() !== "") { // Verifica que haya texto
+                const li = document.createElement('li'); // Crea nuevo elemento li
+                li.innerText = inputItem.value; // Asigna texto del input
+                lista.appendChild(li); // Agrega el li a la lista
+                inputItem.value = ""; // Limpia el input
+            } else {
+                alert("Escribe un ítem antes de agregar."); // Mensaje si input vacío
+            }
+        }
+
+        // Función para eliminar el último ítem de la lista
+        function eliminarItem() {
+            if(lista.lastElementChild) { // Verifica que haya elementos
+                lista.removeChild(lista.lastElementChild); // Elimina el último ítem
+            } else {
+                alert("No hay elementos para eliminar."); // Mensaje si lista vacía
+            }
+        }
+
+        // -------------------------
+        // EVENTOS
+        // -------------------------
+
+        // Click en botón cambiar título y estilo
+        btnCambiar.addEventListener('click', cambiarTitulo);
+
+        // Click en botón agregar ítem
+        btnAgregar.addEventListener('click', agregarItem);
+
+        // Click en botón eliminar ítem
+        btnEliminar.addEventListener('click', eliminarItem);
+
+        // Click en botón cambiar fondo
+        btnColores.addEventListener('click', cambiarFondo);
+
+        // Presionar Enter en el input agrega ítem
+        inputItem.addEventListener('keydown', function(event) {
+            if(event.key === "Enter") {
+                agregarItem();
+            }
+        });
+
+        // Animación al pasar mouse sobre el título
+        titulo.addEventListener('mouseover', function() {
+            titulo.style.transform = 'rotate(5deg) scale(1.1)'; // Gira y escala
+        });
+
+        // Devuelve título a posición original al retirar mouse
+        titulo.addEventListener('mouseout', function() {
+            titulo.style.transform = 'rotate(0deg) scale(1)';
+        });
+
+        /* 
+        RESUMEN DE CAMBIOS:
+        - Cambia el texto y color del título con animación.
+        - Cambia colores y negrita de los párrafos de forma aleatoria.
+        - Permite agregar y eliminar ítems dinámicamente en la lista.
+        - Cambia el fondo de la página a un degradado aleatorio.
+        - Incluye eventos click, keydown, mouseover y mouseout.
+        - Todo documentado con comentarios explicativos.
+        */
+    </script>
+</body>
+</html>
